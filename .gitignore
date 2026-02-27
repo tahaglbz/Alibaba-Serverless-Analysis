@@ -4,6 +4,9 @@ __pycache__/
 *$py.class
 *.so
 .Python
+env/
+venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -16,56 +19,74 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Virtual environments
-venv/
-ENV/
-env/
+# Virtual Environments
 .venv
+venv/
 env.bak/
 venv.bak/
 
-# IDE
+# Large Data Files (not included in repo)
+data/
+datasets/
+
+# IDE & Editor
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
-.DS_Store?
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
 
-# Jupyter/IPython
-.ipynb_checkpoints/
-*.ipynb
-
-# Analysis outputs
-analysis_output/
-/outputs/
-
-# Data (if large)
-*.xlsx
-*.xls
-datasets/
-!datasets/README.md
-
-# OS specific
+# macOS
+.DS_Store
 .AppleDouble
 .LSOverride
-Thumbs.db
+*.dSYM/
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
-# Testing
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Unit tests
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Temporary files
-*.tmp
-*.temp
-*.log
-
 # Environment variables
 .env
 .env.local
+.env.*.local
+
+# OS
+*.bak
+*.tmp
+
+# Logs
+*.log
+
+# Excel temporary files
+.~*

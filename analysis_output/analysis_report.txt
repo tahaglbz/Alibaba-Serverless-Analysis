@@ -1,0 +1,213 @@
+======================================================================
+ALIBABA CLOUD SERVERLESS PERFORMANCE ANALYSIS REPORT
+Generated: 2026-02-27 14:05:30
+======================================================================
+
+1. FUNCTION PERFORMANCE ANALYSIS
+----------------------------------------------------------------------
+
+f10:
+  Configurations tested: 1206
+  Average Duration: 997.54 ms
+  Min Duration: 623.00 ms
+  Max Duration: 5851.00 ms
+  Std Deviation: 612.26 ms
+  Memory Correlation: -0.552
+  CPU Correlation: -0.504
+
+f11:
+  Configurations tested: 1206
+  Average Duration: 2871.26 ms
+  Min Duration: 1908.00 ms
+  Max Duration: 9517.00 ms
+  Std Deviation: 657.48 ms
+  Memory Correlation: -0.176
+  CPU Correlation: -0.161
+
+f12:
+  Configurations tested: 1206
+  Average Duration: 487.71 ms
+  Min Duration: 253.00 ms
+  Max Duration: 3295.00 ms
+  Std Deviation: 335.87 ms
+  Memory Correlation: -0.585
+  CPU Correlation: -0.544
+
+f13:
+  Configurations tested: 1206
+  Average Duration: 682.75 ms
+  Min Duration: 486.00 ms
+  Max Duration: 3678.00 ms
+  Std Deviation: 390.40 ms
+  Memory Correlation: -0.551
+  CPU Correlation: -0.500
+
+f14:
+  Configurations tested: 1206
+  Average Duration: 575.73 ms
+  Min Duration: 291.00 ms
+  Max Duration: 3317.00 ms
+  Std Deviation: 357.25 ms
+  Memory Correlation: -0.548
+  CPU Correlation: -0.498
+
+f15:
+  Configurations tested: 1206
+  Average Duration: 2747.23 ms
+  Min Duration: 1909.00 ms
+  Max Duration: 8334.00 ms
+  Std Deviation: 553.77 ms
+  Memory Correlation: -0.423
+  CPU Correlation: -0.352
+
+f16:
+  Configurations tested: 1206
+  Average Duration: 2880.86 ms
+  Min Duration: 765.00 ms
+  Max Duration: 27224.00 ms
+  Std Deviation: 3133.73 ms
+  Memory Correlation: -0.692
+  CPU Correlation: -0.636
+
+f17:
+  Configurations tested: 1206
+  Average Duration: 292.26 ms
+  Min Duration: 207.00 ms
+  Max Duration: 1611.00 ms
+  Std Deviation: 161.83 ms
+  Memory Correlation: -0.527
+  CPU Correlation: -0.472
+
+f18:
+  Configurations tested: 1206
+  Average Duration: 476.70 ms
+  Min Duration: 251.00 ms
+  Max Duration: 3165.00 ms
+  Std Deviation: 295.26 ms
+  Memory Correlation: -0.534
+  CPU Correlation: -0.482
+
+f19:
+  Configurations tested: 1206
+  Average Duration: 999.12 ms
+  Min Duration: 700.00 ms
+  Max Duration: 5548.00 ms
+  Std Deviation: 592.84 ms
+  Memory Correlation: -0.553
+  CPU Correlation: -0.503
+
+f1:
+  Configurations tested: 1206
+  Average Duration: 3102.51 ms
+  Min Duration: 2339.00 ms
+  Max Duration: 12798.00 ms
+  Std Deviation: 943.77 ms
+  Memory Correlation: -0.378
+  CPU Correlation: -0.299
+
+f20:
+  Configurations tested: 1206
+  Average Duration: 1861.01 ms
+  Min Duration: 1317.00 ms
+  Max Duration: 5067.00 ms
+  Std Deviation: 336.87 ms
+  Memory Correlation: 0.029
+  CPU Correlation: 0.012
+
+f21:
+  Configurations tested: 1206
+  Average Duration: 516.14 ms
+  Min Duration: 393.00 ms
+  Max Duration: 2897.00 ms
+  Std Deviation: 302.00 ms
+  Memory Correlation: -0.545
+  CPU Correlation: -0.493
+
+f2:
+  Configurations tested: 1206
+  Average Duration: 524.43 ms
+  Min Duration: 401.00 ms
+  Max Duration: 2938.00 ms
+  Std Deviation: 302.86 ms
+  Memory Correlation: -0.545
+  CPU Correlation: -0.493
+
+f3:
+  Configurations tested: 1206
+  Average Duration: 742.90 ms
+  Min Duration: 459.00 ms
+  Max Duration: 4420.00 ms
+  Std Deviation: 457.34 ms
+  Memory Correlation: -0.548
+  CPU Correlation: -0.497
+
+f4:
+  Configurations tested: 1206
+  Average Duration: 499.01 ms
+  Min Duration: 276.00 ms
+  Max Duration: 3384.00 ms
+  Std Deviation: 317.93 ms
+  Memory Correlation: -0.564
+  CPU Correlation: -0.528
+
+f5:
+  Configurations tested: 1206
+  Average Duration: 165.73 ms
+  Min Duration: 75.00 ms
+  Max Duration: 964.00 ms
+  Std Deviation: 101.57 ms
+  Memory Correlation: -0.477
+  CPU Correlation: -0.429
+
+f6:
+  Configurations tested: 1206
+  Average Duration: 416.28 ms
+  Min Duration: 294.00 ms
+  Max Duration: 2362.00 ms
+  Std Deviation: 237.12 ms
+  Memory Correlation: -0.543
+  CPU Correlation: -0.492
+
+f7:
+  Configurations tested: 1206
+  Average Duration: 358.72 ms
+  Min Duration: 257.00 ms
+  Max Duration: 1942.00 ms
+  Std Deviation: 200.76 ms
+  Memory Correlation: -0.544
+  CPU Correlation: -0.491
+
+f8:
+  Configurations tested: 1206
+  Average Duration: 427.02 ms
+  Min Duration: 231.00 ms
+  Max Duration: 2458.00 ms
+  Std Deviation: 254.03 ms
+  Memory Correlation: -0.546
+  CPU Correlation: -0.495
+
+f9:
+  Configurations tested: 1206
+  Average Duration: 581.48 ms
+  Min Duration: 447.00 ms
+  Max Duration: 3142.00 ms
+  Std Deviation: 330.54 ms
+  Memory Correlation: -0.545
+  CPU Correlation: -0.496
+
+
+2. WORKFLOW EXECUTION ANALYSIS
+----------------------------------------------------------------------
+
+Run 1:
+
+Run 2:
+
+Run 3:
+
+
+3. KEY FINDINGS
+----------------------------------------------------------------------
+• Total functions analyzed: 21
+• Total workflow runs: 3
+• Analysis scope: Performance profiling and resource correlation
