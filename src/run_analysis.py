@@ -68,16 +68,16 @@ def run_complete_analysis():
         
         print("\n📁 Output Files Generated:")
         print("   analysis_output/")
-        print("   ├── analysis_report.txt")
-        print("   ├── advanced_analysis_report.txt")
+        print("   ├── analysis_report.md")
+        print("   ├── advanced_analysis_report.md")
         print("   ├── function_performance_analysis.csv")
         print("   ├── workflow_execution_analysis.csv")
         print("   ├── 01_function_duration_comparison.png")
         print("   └── 02_resource_correlation.png")
         
         print("\n💡 Next Steps:")
-        print("   1. Review analysis_report.txt for detailed metrics")
-        print("   2. Check advanced_analysis_report.txt for optimization recommendations")
+        print("   1. Review analysis_report.md for detailed metrics")
+        print("   2. Check advanced_analysis_report.md for optimization recommendations")
         print("   3. Examine PNG files for visual insights")
         print("   4. Use CSV files for further analysis or reports")
         

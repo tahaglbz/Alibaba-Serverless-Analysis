@@ -16,7 +16,7 @@ warnings.filterwarnings('ignore')
 
 # Configuration
 BASE_PATH = Path(__file__).parent
-DATASETS_PATH = BASE_PATH / "datasets"
+DATASETS_PATH = BASE_PATH.parent / "data" / "datasets"
 
 class AlibabaDataAnalyzer:
     """Main analyzer for Alibaba Cloud serverless logs"""
@@ -194,53 +194,79 @@ class AlibabaDataAnalyzer:
             plt.close()
     
     def generate_report(self, output_dir="analysis_output"):
-        """Generate comprehensive analysis report"""
+        """Generate comprehensive analysis report in Markdown format"""
         print("\n📄 Generating analysis report...")
         
         os.makedirs(output_dir, exist_ok=True)
         
-        report_path = f"{output_dir}/analysis_report.txt"
+        report_path = f"{output_dir}/analysis_report.md"
         
         with open(report_path, 'w') as f:
-            f.write("="*70 + "\n")
-            f.write("ALIBABA CLOUD SERVERLESS PERFORMANCE ANALYSIS REPORT\n")
-            f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write("="*70 + "\n\n")
+            # Header
+            f.write("# Alibaba Cloud Serverless Performance Analysis Report\n\n")
+            f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            f.write("---\n\n")
             
             # Section 1: Performance Profiles
-            f.write("1. FUNCTION PERFORMANCE ANALYSIS\n")
-            f.write("-"*70 + "\n")
+            f.write("## 1. Function Performance Analysis\n\n")
             if self.analysis_results.get('perf_profiles'):
-                for func_name, metrics in self.analysis_results['perf_profiles'].items():
-                    f.write(f"\n{func_name}:\n")
-                    f.write(f"  Configurations tested: {metrics['config_count']}\n")
-                    f.write(f"  Average Duration: {metrics['avg_duration']:.2f} ms\n")
-                    f.write(f"  Min Duration: {metrics['min_duration']:.2f} ms\n")
-                    f.write(f"  Max Duration: {metrics['max_duration']:.2f} ms\n")
-                    f.write(f"  Std Deviation: {metrics['std_duration']:.2f} ms\n")
-                    f.write(f"  Memory Correlation: {metrics['memory_correlation']:.3f}\n")
-                    f.write(f"  CPU Correlation: {metrics['cpu_correlation']:.3f}\n")
+                f.write("### Performance Metrics by Function\n\n")
+                f.write("| Function | Configs | Avg Duration (ms) | Min (ms) | Max (ms) | Std Dev | Memory Corr | CPU Corr |\n")
+                f.write("|----------|---------|-------------------|----------|----------|---------|-------------|----------|\n")
+                
+                for func_name, metrics in sorted(self.analysis_results['perf_profiles'].items()):
+                    f.write(f"| **{func_name}** | {metrics['config_count']} | "
+                           f"{metrics['avg_duration']:.2f} | {metrics['min_duration']:.2f} | "
+                           f"{metrics['max_duration']:.2f} | {metrics['std_duration']:.2f} | "
+                           f"{metrics['memory_correlation']:.3f} | {metrics['cpu_correlation']:.3f} |\n")
+                
+                f.write("\n#### Key Metrics Explanation\n\n")
+                f.write("- **Avg Duration**: Mean execution time across all configurations\n")
+                f.write("- **Std Dev**: Standard deviation of execution times\n")
+                f.write("- **Memory Corr**: Correlation between memory allocation and execution time (-1 to 1)\n")
+                f.write("- **CPU Corr**: Correlation between CPU allocation and execution time (-1 to 1)\n")
+                f.write("  - **Negative** (<-0.3): More resources = Slower execution (optimization opportunity)\n")
+                f.write("  - **Positive** (>0.3): More resources = Faster execution (standard behavior)\n\n")
             
             # Section 2: Workflow Analysis
-            f.write("\n\n2. WORKFLOW EXECUTION ANALYSIS\n")
-            f.write("-"*70 + "\n")
+            f.write("## 2. Workflow Execution Analysis\n\n")
             if self.analysis_results.get('workflow_patterns'):
-                for run_num, workflows in self.analysis_results['workflow_patterns'].items():
-                    f.write(f"\nRun {run_num}:\n")
+                for run_num, workflows in sorted(self.analysis_results['workflow_patterns'].items()):
+                    f.write(f"### Run {run_num}\n\n")
+                    f.write("| Workflow | Executions | Avg Duration (ms) | Median (ms) | Std Dev | Range (ms) |\n")
+                    f.write("|----------|------------|-------------------|-------------|---------|------------|\n")
+                    
                     for workflow_name, metrics in workflows.items():
-                        f.write(f"  {workflow_name}:\n")
-                        f.write(f"    Executions: {metrics['total_executions']}\n")
-                        f.write(f"    Avg Duration: {metrics['avg_duration']:.2f} ms\n")
-                        f.write(f"    Median Duration: {metrics['median_duration']:.2f} ms\n")
-                        f.write(f"    Std Deviation: {metrics['std_duration']:.2f} ms\n")
-                        f.write(f"    Range: {metrics['min_duration']:.2f} - {metrics['max_duration']:.2f} ms\n")
+                        f.write(f"| **{workflow_name}** | {metrics['total_executions']} | "
+                               f"{metrics['avg_duration']:.2f} | {metrics['median_duration']:.2f} | "
+                               f"{metrics['std_duration']:.2f} | "
+                               f"{metrics['min_duration']:.2f} - {metrics['max_duration']:.2f} |\n")
+                    f.write("\n")
             
             # Section 3: Key Findings
-            f.write("\n\n3. KEY FINDINGS\n")
-            f.write("-"*70 + "\n")
-            f.write("• Total functions analyzed: {}\n".format(len(self.perf_profiles)))
-            f.write("• Total workflow runs: {}\n".format(len(self.workflow_logs)))
-            f.write("• Analysis scope: Performance profiling and resource correlation\n")
+            f.write("## 3. Key Findings\n\n")
+            f.write(f"- **Total Functions Analyzed**: {len(self.perf_profiles)}\n")
+            f.write(f"- **Total Workflow Runs**: {len(self.workflow_logs)}\n")
+            f.write("- **Analysis Scope**: Performance profiling, resource correlation analysis\n")
+            f.write("- **Key Insight**: Negative correlations in memory/CPU suggest over-provisioning in many functions\n\n")
+            
+            # Section 4: Summary Statistics
+            if self.analysis_results.get('perf_profiles'):
+                results = self.analysis_results['perf_profiles']
+                durations = [v['avg_duration'] for v in results.values()]
+                memory_corrs = [v['memory_correlation'] for v in results.values()]
+                cpu_corrs = [v['cpu_correlation'] for v in results.values()]
+                
+                f.write("## 4. Summary Statistics\n\n")
+                f.write(f"- **Average Function Duration**: {np.mean(durations):.2f} ms\n")
+                f.write(f"- **Fastest Function**: {min(results, key=lambda x: results[x]['avg_duration'])} "
+                       f"({min(durations):.2f} ms)\n")
+                f.write(f"- **Slowest Function**: {max(results, key=lambda x: results[x]['avg_duration'])} "
+                       f"({max(durations):.2f} ms)\n")
+                f.write(f"- **Average Memory Correlation**: {np.mean(memory_corrs):.3f}\n")
+                f.write(f"- **Average CPU Correlation**: {np.mean(cpu_corrs):.3f}\n")
+                f.write(f"- **Negative Memory Correlations**: {sum(1 for c in memory_corrs if c < -0.3)} functions\n")
+                f.write(f"- **Negative CPU Correlations**: {sum(1 for c in cpu_corrs if c < -0.3)} functions\n\n")
         
         print(f"  ✓ Report saved: {report_path}")
         return report_path
