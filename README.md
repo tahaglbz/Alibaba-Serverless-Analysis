@@ -67,12 +67,60 @@ python src/run_analysis.py
 
 ---
 
+## Machine Learning Performance Prediction
+
+### Model Overview
+
+This project includes a sophisticated **Machine Learning classification module** that predicts serverless function performance levels based on resource configurations.
+
+- **Algorithm:** Random Forest Classifier with 100 decision trees
+- **Input Features:** Memory allocation (MB) and CPU cores
+- **Target:** Binary classification - "High Performance" vs "Low Performance"
+- **Performance Threshold:** Median execution duration across all configurations
+
+### Key Metrics
+
+| Metric | Purpose |
+|--------|---------|
+| **Accuracy** | Overall correctness of predictions |
+| **Precision** | Reliability of high-performance predictions |
+| **Recall** | Ability to identify actual high-performance cases |
+| **F1-Score** | Balanced measure of precision and recall |
+| **ROC-AUC** | Discriminative ability of the model (0.5=random, 1.0=perfect) |
+
+### Running ML Analysis
+
+```bash
+# Run complete pipeline including ML analysis
+python src/run_analysis.py
+
+# Or run ML module independently
+python src/ml_analysis.py
+```
+
+### Output Files
+
+- **ml_performance_report.md** - Comprehensive analysis with metrics, confusion matrix, and recommendations
+- **plots/confusion_matrix.png** - Classification performance visualization
+- **plots/roc_curve.png** - ROC curve with AUC score
+- **plots/feature_importance.png** - Relative importance of memory vs CPU features
+
+### Use Cases
+
+1. **Resource Optimization:** Predict optimal memory-CPU combinations for target performance
+2. **Capacity Planning:** Guide resource provisioning decisions based on workload requirements
+3. **Cost Optimization:** Identify configurations that balance performance and cloud expenses
+4. **Performance Validation:** Verify new function configurations meet performance targets
+
+---
+
 ## Optimization Strategy
 
-1. **Downsize memory allocations** for the 19 functions exhibiting negative correlation — expect 45–60 % speed‑ups.
-2. **Debug variance in f16** (σ≈3 s) before scaling.
-3. Profile and tune f1, f11, f15 for latency.
-4. Implement connection pooling, caching, and enhanced monitoring to sustain gains.
+1. **Downsize memory allocations** for the 19 functions exhibiting negative correlation — expect 45–60 % speed‑ups.
+2. **Debug variance in f16** (σ≈3 s) before scaling.
+3. **Validate with ML model** - Use performance predictions to test resource changes before production deployment.
+4. Profile and tune f1, f11, f15 for latency.
+5. Implement connection pooling, caching, and enhanced monitoring to sustain gains.
 
 ---
 
