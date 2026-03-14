@@ -112,8 +112,112 @@ By publishing analysis code, datasets (where possible), and detailed results inc
 
 Our analysis pipeline consists of three stages: (1) **Data Collection and Preparation**, (2) **Model Development and Training**, and (3) **Evaluation and Comparison**.
 
+**Data Processing Pipeline Implementation:**
+
+```python
+class AcademicMLComparison:
+    """Five-model ML comparison for academic research"""
+    
+    def load_and_prepare_data(self):
+        """Load and prepare data for all models"""
+        print("\n🔧 ACADEMIC ML: Loading and preparing data...")
+        
+        perf_path = DATASETS_PATH / "aliyunfc_functions_perf_profile_cpu"
+        all_features = []
+        all_labels = []
+        
+        # Load all performance profiles
+        for file in sorted(perf_path.glob("f*_perf_profile.json")):
+            func_name = file.stem.replace("_perf_profile", "")
+            with open(file, 'r') as f:
+                profile = json.load(f)
+            $$P(y=1|x) = \frac{1}{1 + e^{-wx-b}}$$
+
+Where w represents learned feature weights and b is the bias term. This linear model serves as a baseline, providing interpretable feature coefficients directly indicating feature impact on predictions. Maximum iterations set to 1,000 to ensure convergence.
+
+```python
+# Logistic Regression Implementation
+
+```python
+# Random Forest Implementation
+model_rf = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    min_samples_leaf=2,
+    min_samples_split=5,
+    class_weight='balanced',
+    random_state=42
+)
+model_rf.fit(X_train, y_train)
+predictions_rf = model_rf.predict(X_test)
+f1_rf = f1_score(y_test, predictions_rf)
+```
+model_lr = LogisticRegression(
+    max_iter=1000,
+    class_weight='balanced'
+)
+model_lr.fit(X_train, y_train)
+predictions_lr = model_lr.predict(X_test)
+accuracy_lr = accuracy_score(y_test, predictions_lr)
+```
+                all_features.append([int(memory), float(cpu)])
+                all_labels.append(float(duration_ms))
+        
+        # Create DataFrame with standardized features
+        df = pd.DataFrame({
+            'Memory': [f[0] for f in all_features],
+            'CPU': [f[1] for f in all_features],
+            'Duration': all_labels,
+        })
+        return df
+```
+
 **Data Collection Phase:** Performance profiles from 21 Alibaba Cloud functions were collected, representing diverse workload characteristics including I/O-intensive, compute-intensive, and mixed-workload functions. Raw profiles consist of configuration-duration pairs, where each configuration specifies memory allocation and CPU cores, and duration represents observed function execution time in milliseconds. Initial dataset contains 1,206 observations per function (total 25,326 records) across configurations ranging from minimal (512 MB, 0.25 CPU) to maximum (3,648 MB, 2.9 CPU) allocations.
 
+
+```python
+# Support Vector Machine Implementation
+
+```python
+# Gradient Boosting Implementation
+
+```python
+# Neural Network Implementation
+model_nn = MLPClassifier(
+    hidden_layer_sizes=(128, 64, 32),
+    activation='relu',
+    solver='adam',
+    learning_rate_init=0.001,
+    validation_fraction=0.1,
+    early_stopping=True,
+    random_state=42,
+    max_iter=500
+)
+model_nn.fit(X_train, y_train)
+predictions_nn = model_nn.predict(X_test)
+accuracy_nn = accuracy_score(y_test, predictions_nn)
+```
+model_gb = GradientBoostingClassifier(
+    n_estimators=100,
+    max_depth=5,
+    learning_rate=0.1,
+    subsample=0.8,
+    random_state=42
+)
+model_gb.fit(X_train, y_train)
+predictions_gb = model_gb.predict(X_test)
+```
+model_svm = SVC(
+    kernel='rbf',
+    C=1.0,
+    gamma='scale',
+    class_weight='balanced',
+    probability=True,
+    random_state=42
+)
+model_svm.fit(X_train, y_train)
+roc_auc_svm = roc_auc_score(y_test, model_svm.predict_proba(X_test)[:, 1])
+```
 **Preprocessing and Feature Engineering:** Raw duration data undergoes normalization and classification. We compute the median execution duration across all configurations (535 milliseconds) as the performance threshold. This threshold defines binary classification targets: observations with duration ≤ median are classified as "High Performance" (label 1), while those exceeding the median are classified as "Low Performance" (label 0). The resulting dataset contains 12,808 high-performance and 12,518 low-performance observations, providing balanced class distribution.
 
 ### 5.2 Feature Specification and Data Preparation
@@ -236,7 +340,72 @@ Key observations:
 
 4. **ROC-AUC Variation:** Despite similar accuracy and F1-scores, models show substantial ROC-AUC variation (0.5929 to 0.6675), indicating different decision threshold characteristics. SVM's superior ROC-AUC suggests better probability calibration.
 
-### 6.3 Feature Importance Analysis
+#### 6.2.1 Model Comparison Visualization
+
+![Model Comparison Overview](analysis_output/plots/00_models_comparison.png)
+
+#### 6.2.2 Individual Model Performance Visualizations
+
+**Logistic Regression Results:**
+
+![Logistic Regression Analysis](analysis_output/plots/01_model_logistic_regression.png)
+
+- **Strength:** Interpretable linear coefficients directly indicate feature direction and magnitude
+- **Weakness:** Assumes linear decision boundary; cannot capture nonlinear memory-CPU interactions
+- **AUC:** 0.6518 (moderate, typical for linear separation)
+- **Use Case:** When interpretability is critical or when feature space is known to be approximately linear
+
+**Random Forest Results:**
+
+![Random Forest Analysis](analysis_output/plots/02_model_random_forest.png)
+
+- **Strength:** Captures nonlinear interactions through ensemble of decision trees
+- **Weakness:** Lower ROC-AUC (0.5929) suggests high FP rate at many thresholds
+- **AUC:** 0.5929 (lowest among ensemble/advanced methods)
+- **Use Case:** When feature interactions are complex but interpretability is needed
+
+**Support Vector Machine Results:**
+
+![SVM Analysis](analysis_output/plots/03_model_svm.png)
+
+- **Strength:** Highest ROC-AUC (0.6675) through kernel-based nonlinear mapping
+- **Weakness:** Limited interpretability; "black box" decision boundaries in transformed space
+- **AUC:** 0.6675 (highest)
+- **Use Case:** When achieving optimal discrimination across thresholds is paramount
+
+**Gradient Boosting Results:**
+
+![Gradient Boosting Analysis](analysis_output/plots/04_model_gradient_boosting.png)
+
+- **Strength:** Iterative refinement often captures complex patterns
+- **Weakness:** Moderate performance; suggests feature space may not benefit from extensive sequential optimization
+- **AUC:** 0.6056
+- **Use Case:** As ensemble baseline, performs adequately but not optimally
+
+**Neural Network Results:**
+
+![Neural Network Analysis](analysis_output/plots/05_model_neural_network.png)
+
+- **Strength:** Highest accuracy and F1-score; best at default probability threshold (0.5)
+- **Weakness:** Computationally expensive; requires tuning hidden layer architecture
+- **AUC:** 0.6615 (second-best)
+- **Use Case:** When accuracy at specific threshold is critical; when large training data is available
+
+### 6.3 ROC Curves Comparison
+
+![ROC Curves Overlay](analysis_output/plots/06_roc_curves_overlay.png)
+
+The ROC curves overlay visualization shows all five models' discriminative abilities across probability thresholds:
+
+- **SVM** achieves highest AUC (0.6675), indicating best discrimination across probability thresholds
+- **Neural Network** closely follows (0.6615), with strong performance across thresholds
+- **Logistic Regression** achieves (0.6518) with consistent linear performance
+- **Gradient Boosting** achieves (0.6056), showing moderate threshold-invariant performance
+- **Random Forest** achieves (0.5929), the lowest ROC-AUC among all models
+
+The relatively modest ROC-AUC values (below 0.7) suggest memory and CPU alone provide limited discrimination between performance classes. The ordering difference from F1-score ranking indicates tradeoffs: Neural Network maximizes F1 through balanced precision/recall targeting specific probability threshold, while SVM maintains better discrimination across thresholds despite lower F1 at default threshold.
+
+### 6.4 Feature Importance Analysis
 
 Feature importance analysis reveals CPU allocation importance relative to memory:
 
@@ -247,7 +416,7 @@ Feature importance analysis reveals CPU allocation importance relative to memory
 
 **Insight:** CPU specification contributes 67.6% toward performance prediction vs. 32.4% for memory. This challenges conventional assumptions prioritizing memory for serverless performance. The finding suggests serverless function execution is CPU-bottlenecked rather than memory-constrained for the analyzed workload characteristics. This has significant cost implications: optimizing CPU allocation before memory allocation may yield better returns.
 
-### 6.4 Confusion Matrix Analysis
+### 6.5 Confusion Matrix Analysis
 
 #### Representative Confusion Matrix (Neural Network Model)
 
@@ -265,49 +434,11 @@ This pattern demonstrates:
 
 The high false positive rate indicates models over-predict high performance. This is actually desirable for deployment: misclassifying likely-low configurations as potentially-high is preferable to predicting high performance for actually-low configurations, as the former leads to conservative resource allocation.
 
-### 6.5 ROC Curve Interpretation
+### 6.6 ROC Curve Interpretation
 
-Figure 6_roc_curves_overlay shows all five models' ROC curves:
-
-- SVM achieves highest AUC (0.6675), indicating best discrimination across probability thresholds
-- Neural Network closely follows (0.6615)
-- Logistic Regression achieves (0.6518)
-- Gradient Boosting achieves (0.6056)
-- Random Forest achieves (0.5929)
+**[See ROC Curves Overlay visualization in Section 6.3 above]**
 
 The relatively modest ROC-AUC values (below 0.7) suggest memory and CPU alone provide limited discrimination between performance classes. The ordering difference from F1-score ranking indicates tradeoffs: Neural Network maximizes F1 through balanced precision/recall targeting specific probability threshold, while SVM maintains better discrimination across thresholds despite lower F1 at default threshold.
-
-### 6.6 Individual Model Characteristics
-
-#### Logistic Regression Results
-- **Strength:** Interpretable linear coefficients directly indicate feature direction and magnitude
-- **Weakness:** Assumes linear decision boundary; cannot capture nonlinear memory-CPU interactions
-- **AUC:** 0.6518 (moderate, typical for linear separation)
-- **Use Case:** When interpretability is critical or when feature space is known to be approximately linear
-
-#### Random Forest Results
-- **Strength:** Captures nonlinear interactions through ensemble of decision trees
-- **Weakness:** Lower ROC-AUC (0.5929) suggests high FP rate at many thresholds
-- **AUC:** 0.5929 (lowest among ensemble/advanced methods)
-- **Use Case:** When feature interactions are complex but interpretability is needed
-
-#### SVM Results
-- **Strength:** Highest ROC-AUC (0.6675) through kernel-based nonlinear mapping
-- **Weakness:** Limited interpretability; "black box" decision boundaries in transformed space
-- **AUC:** 0.6675 (highest)
-- **Use Case:** When achieving optimal discrimination across thresholds is paramount
-
-#### Gradient Boosting Results
-- **Strength:** Iterative refinement often captures complex patterns
-- **Weakness:** Moderate performance; suggests feature space may not benefit from extensive sequential optimization
-- **AUC:** 0.6056
-- **Use Case:** As ensemble baseline, performs adequately but not optimally
-
-#### Neural Network Results
-- **Strength:** Highest accuracy and F1-score; best at default probability threshold (0.5)
-- **Weakness:** Computationally expensive; requires tuning hidden layer architecture
-- **AUC:** 0.6615 (second-best)
-- **Use Case:** When accuracy at specific threshold is critical; when large training data is available
 
 ---
 
@@ -363,6 +494,48 @@ Our comparative analysis enables algorithm selection based on requirements:
 4. **Conservative Configuration Selection:** High recall (>0.9) but lower precision (≤0.6) means predictions tend toward "high performance." Use predictions to conservatively select configurations, expecting performance benefits over random configuration.
 
 5. **Empirical Validation:** Deploy predicted optimal configurations and measure actual performance. Prediction models should guide exploration rather than replace empirical validation.
+
+**Implementation Code Example for Model Evaluation:**
+
+```python
+# Comprehensive evaluation across all models
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+
+def evaluate_models(models_dict, X_test, y_test):
+    """Evaluate and compare all trained models"""
+    results = {}
+    
+    for model_name, model in models_dict.items():
+        predictions = model.predict(X_test)
+        probabilities = model.predict_proba(X_test)[:, 1]
+        
+        results[model_name] = {
+            'accuracy': accuracy_score(y_test, predictions),
+            'f1_score': f1_score(y_test, predictions),
+            'roc_auc': roc_auc_score(y_test, probabilities),
+            'predictions': predictions
+        }
+    
+    return results
+
+# Compare models
+all_models = {
+    'Logistic Regression': model_lr,
+    'Random Forest': model_rf,
+    'SVM': model_svm,
+    'Gradient Boosting': model_gb,
+    'Neural Network': model_nn
+}
+
+comparison_results = evaluate_models(all_models, X_test, y_test)
+
+# Generate performance report
+for model_name, metrics in comparison_results.items():
+    print(f"\n{model_name}:")
+    print(f"  Accuracy: {metrics['accuracy']:.4f}")
+    print(f"  F1-Score: {metrics['f1_score']:.4f}")
+    print(f"  ROC-AUC: {metrics['roc_auc']:.4f}")
+```
 
 **For Researchers:**
 
