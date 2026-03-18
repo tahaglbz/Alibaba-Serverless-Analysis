@@ -33,8 +33,7 @@ env.bak/
 venv.bak/
 
 # Large Data Files (not included in repo)
-# data/
-# datasets/
+
 
 # IDE & Editor
 .vscode/
